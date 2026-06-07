@@ -7,6 +7,7 @@ import signPoster from "@/assets/media/signlanguage.jpg";
 import policyVideo from "@/assets/media/policy.mp4";
 import policyPoster from "@/assets/media/policy.jpg";
 import awsquiz from "@/assets/media/awsquiz.jpg";
+import kan from "@/assets/media/kan.jpg";
 
 export type ProjectCategory =
   | "Finance"
@@ -45,6 +46,23 @@ export const projects: Project[] = [
     tech: ["SvelteKit", "Tailwind", "Vercel"],
     image: awsquiz,
     href: "https://aws-cloud-practitioner-quiz-webapp-2m1ew48if-junminggs-projects.vercel.app/",
+  },
+  {
+    title: "Kolmogorov-Arnold Networks for Time-Series Forecasting",
+    year: "2024",
+    category: "Finance",
+    context: "School project",
+    highlight:
+      "Benchmarked KANs against MLP/RNN/LSTM for S&P 500 volatility forecasting.",
+    bullets: [
+      "Evaluated Temporal and Multivariate-Temporal KANs against MLP, RNN, and LSTM baselines",
+      "Forecast S&P 500 realized volatility from 15+ FRED macro indicators across 1-day, 1-week, and 1-month horizons",
+      "Implemented the models and fixed a critical pruning-order bug in the pykan library",
+      "Found KANs interpretable but ~100× slower to train, with surprising parameter inefficiency in practice",
+    ],
+    tech: ["Python", "PyTorch", "KAN", "Time Series"],
+    image: kan,
+    href: "/kan-time-series-forecasting.pdf",
   },
   {
     title: "Forecasting Yield Curves for Zero-Coupon Bonds",
