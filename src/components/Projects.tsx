@@ -13,10 +13,13 @@ const filters: Filter[] = ["All", ...projectCategories];
 export function Projects() {
   const [active, setActive] = useState<Filter>("All");
 
+  const sorted = [...projects].sort(
+    (a, b) => Number(b.year) - Number(a.year)
+  );
   const visible =
     active === "All"
-      ? projects
-      : projects.filter((p) => p.category === active);
+      ? sorted
+      : sorted.filter((p) => p.category === active);
 
   return (
     <section id="projects" className="relative px-6 py-28">

@@ -27,6 +27,9 @@ lerna-debug.log*
 Thumbs.db
 *.sw?
 
+# Scratch / preview artifacts (e.g. screenshot crops)
+/_*
+
 # Source documents — keep private PII out of the repo.
 # The public, downloadable resume lives at public/resume.pdf.
 /GaTech_Unofficial_Transcript.pdf

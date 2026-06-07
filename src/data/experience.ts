@@ -1,16 +1,20 @@
-import aip from "@/assets/AIP.jpg";
-import stb from "@/assets/STB.png";
+import stenggLight from "@/assets/logos/stengg-light.png";
+import stenggDark from "@/assets/logos/stengg-dark.png";
+import modularLight from "@/assets/logos/modular-light.png";
+import modularDark from "@/assets/logos/modular-dark.png";
 import yokogawa from "@/assets/logos/yokogawa.png";
-import stengg from "@/assets/logos/stengg.png";
-import modular from "@/assets/logos/modular.png";
+import aipLight from "@/assets/logos/aipalette-light.png";
+import aipDark from "@/assets/logos/aipalette-dark.png";
+import stb from "@/assets/logos/stb-light.png";
 
 export type Experience = {
   company: string;
   role: string;
   period: string;
-  logo: string;
-  /** Tile background — "dark" for light/knockout logos. */
-  logoBg: "light" | "dark";
+  /** Logo tuned for the light theme (dark/colored on light tile). */
+  logoLight: string;
+  /** Logo tuned for the dark theme (white/badge on dark tile). */
+  logoDark: string;
   kind: "Full-time" | "Internship";
   bullets: string[];
 };
@@ -20,8 +24,8 @@ export const experiences: Experience[] = [
     company: "Modular Asset Management",
     role: "Software Engineer",
     period: "Feb 2026 — Present",
-    logo: modular,
-    logoBg: "dark",
+    logoLight: modularLight,
+    logoDark: modularDark,
     kind: "Full-time",
     bullets: [
       "Migrated legacy scripts and Excel-macro jobs into Python pipelines orchestrated by Apache Airflow on Kubernetes, improving reliability and maintainability of daily jobs",
@@ -33,8 +37,8 @@ export const experiences: Experience[] = [
     company: "ST Engineering",
     role: "Senior AI Engineer",
     period: "Apr 2025 — Feb 2026",
-    logo: stengg,
-    logoBg: "light",
+    logoLight: stenggLight,
+    logoDark: stenggDark,
     kind: "Full-time",
     bullets: [
       "Built a RAG chatbot POC from scratch — a multi-agent system automating data retrieval, filtering, visualization, and analysis",
@@ -46,8 +50,8 @@ export const experiences: Experience[] = [
     company: "Yokogawa Engineering Asia",
     role: "Data Scientist",
     period: "Aug 2024 — Apr 2025",
-    logo: yokogawa,
-    logoBg: "light",
+    logoLight: yokogawa,
+    logoDark: yokogawa,
     kind: "Full-time",
     bullets: [
       "Built a shipping-container-number OCR web app with a two-stage model at 98.8% mAP, exposed as an API to cut manual-entry error",
@@ -59,8 +63,8 @@ export const experiences: Experience[] = [
     company: "Ai Palette",
     role: "Data Scientist",
     period: "May 2022 — Apr 2024",
-    logo: aip,
-    logoBg: "light",
+    logoLight: aipLight,
+    logoDark: aipDark,
     kind: "Full-time",
     bullets: [
       "Drove $100K in revenue building and maintaining the Flavor Wheel visualization — critical to retaining a major client",
@@ -75,8 +79,8 @@ export const experiences: Experience[] = [
     company: "Ai Palette",
     role: "Data Science Intern",
     period: "Dec 2021 — Apr 2022",
-    logo: aip,
-    logoBg: "light",
+    logoLight: aipLight,
+    logoDark: aipDark,
     kind: "Internship",
     bullets: [
       "Tailored custom analytics to precisely meet and exceed client specifications",
@@ -89,8 +93,8 @@ export const experiences: Experience[] = [
     company: "Singapore Tourism Board",
     role: "Data Analytics Intern",
     period: "Jun 2020 — Aug 2020",
-    logo: stb,
-    logoBg: "light",
+    logoLight: stb,
+    logoDark: stb,
     kind: "Internship",
     bullets: [
       "Built data and predictive analytics in R, featured in the annual Travel Agents report",

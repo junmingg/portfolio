@@ -1,10 +1,12 @@
 import { experiences } from "@/data/experience";
+import { useTheme } from "@/hooks/use-theme";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 
 export function Experience() {
+  const { theme } = useTheme();
   return (
     <section id="experience" className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
@@ -29,14 +31,12 @@ export function Experience() {
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                       <div
                         className={cn(
-                          "flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-3",
-                          exp.logoBg === "dark"
-                            ? "border-white/10 bg-[#0f1115]"
-                            : "border-border bg-white"
+                          "flex h-20 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-2.5",
+                          "border-border bg-foreground/[0.03] dark:bg-white/[0.04]"
                         )}
                       >
                         <img
-                          src={exp.logo}
+                          src={theme === "dark" ? exp.logoDark : exp.logoLight}
                           alt={`${exp.company} logo`}
                           className="max-h-full max-w-full object-contain"
                         />

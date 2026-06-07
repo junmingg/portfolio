@@ -19,17 +19,26 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       {/* Media */}
       <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-foreground/[0.03]">
-        <video
-          src={project.video}
-          poster={project.poster}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="none"
-          aria-label={`${project.title} preview`}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-        />
+        {project.video ? (
+          <video
+            src={project.video}
+            poster={project.image}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            aria-label={`${project.title} preview`}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          />
+        ) : (
+          <img
+            src={project.image}
+            alt={`${project.title} preview`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          />
+        )}
         <div className="absolute left-4 top-4 flex items-center gap-2">
           <span className="rounded-full bg-background/70 px-3 py-1 font-mono text-[0.68rem] tracking-wide text-foreground backdrop-blur-sm">
             {project.category}

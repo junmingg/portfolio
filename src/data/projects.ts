@@ -6,6 +6,7 @@ import signVideo from "@/assets/media/signlanguage.mp4";
 import signPoster from "@/assets/media/signlanguage.jpg";
 import policyVideo from "@/assets/media/policy.mp4";
 import policyPoster from "@/assets/media/policy.jpg";
+import awsquiz from "@/assets/media/awsquiz.jpg";
 
 export type ProjectCategory =
   | "Finance"
@@ -22,12 +23,29 @@ export type Project = {
   highlight: string;
   bullets: string[];
   tech: string[];
-  video: string;
-  poster: string;
+  /** Still image — also serves as the poster when a video is present. */
+  image: string;
+  /** Optional looping preview clip. */
+  video?: string;
   href: string;
 };
 
 export const projects: Project[] = [
+  {
+    title: "AWS Cloud Practitioner Practice Quiz",
+    year: "2025",
+    category: "Web",
+    context: "Personal project",
+    highlight: "Turned a community question bank into a 23-exam practice platform.",
+    bullets: [
+      "Converted an open-source GitHub question bank into an interactive front-end quiz",
+      "23 practice exams with search, status filtering, sorting, and per-exam progress tracking",
+      "Tracks best scores, attempts, and weak areas to build exam readiness",
+    ],
+    tech: ["SvelteKit", "Tailwind", "Vercel"],
+    image: awsquiz,
+    href: "https://aws-cloud-practitioner-quiz-webapp-2m1ew48if-junminggs-projects.vercel.app/",
+  },
   {
     title: "Forecasting Yield Curves for Zero-Coupon Bonds",
     year: "2020",
@@ -41,7 +59,7 @@ export const projects: Project[] = [
     ],
     tech: ["R", "ARIMA", "Time Series"],
     video: surfaceVideo,
-    poster: surfacePoster,
+    image: surfacePoster,
     href: "https://jmchen.notion.site/Estimating-and-Forecasting-Yield-Curves-for-Zero-Coupon-Bonds-33cfb594de8149d88017e934caf181a0",
   },
   {
@@ -58,7 +76,7 @@ export const projects: Project[] = [
     ],
     tech: ["Excel", "Optimization", "Forecasting"],
     video: liquorVideo,
-    poster: liquorPoster,
+    image: liquorPoster,
     href: "https://jmchen.notion.site/Optimising-Liquor-Store-Operations-a458d9d639964efea15b60a291819f60",
   },
   {
@@ -74,7 +92,7 @@ export const projects: Project[] = [
     ],
     tech: ["Python", "VGG-16", "MediaPipe", "CNN"],
     video: signVideo,
-    poster: signPoster,
+    image: signPoster,
     href: "https://jmchen.notion.site/Sign-Language-to-Speech-45fbe6574cf44689be9755169a7b5596",
   },
   {
@@ -89,7 +107,7 @@ export const projects: Project[] = [
     ],
     tech: ["Python", "Vue.js", "JavaScript", "HTML"],
     video: policyVideo,
-    poster: policyPoster,
+    image: policyPoster,
     href: "https://jmchen.notion.site/Policy-Aggregator-GovTech-CodeFiesta-2021-89a80a9070974c7cbdf673f2460b206a",
   },
 ];
