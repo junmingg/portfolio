@@ -5,7 +5,7 @@ export const site = {
   brand: "<JunMing./>",
   role: "AI/ML Engineer",
   email: "chenjm246@gmail.com",
-  resume: "/resume.pdf",
+  resume: `${import.meta.env.BASE_URL}resume.pdf`,
   tagline:
     "AI/ML engineer building LLM-powered systems — RAG pipelines, multi-agent tools, and the data infrastructure behind them — and shipping fast with agentic coding.",
   about: [

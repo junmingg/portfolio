@@ -62,7 +62,7 @@ export const projects: Project[] = [
     ],
     tech: ["Python", "PyTorch", "KAN", "Time Series"],
     image: kan,
-    href: "/kan-time-series-forecasting.pdf",
+    href: `${import.meta.env.BASE_URL}kan-time-series-forecasting.pdf`,
   },
   {
     title: "Forecasting Yield Curves for Zero-Coupon Bonds",
