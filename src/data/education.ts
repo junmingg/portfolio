@@ -1,8 +1,18 @@
+import awsSaa from "@/assets/certs/aws-saa.png";
+import awsCcp from "@/assets/certs/aws-ccp.png";
+import dlai from "@/assets/certs/dlai.png";
+
 export type Course = {
   code: string;
   name: string;
   /** Grade for graduate courses, or language/tool for undergrad. */
   meta: string;
+};
+
+export type Certification = {
+  name: string;
+  issuer: string;
+  logo: string;
 };
 
 export type School = {
@@ -48,6 +58,24 @@ export const schools: School[] = [
   },
 ];
 
+export const certifications: Certification[] = [
+  {
+    name: "AWS Solutions Architect – Associate",
+    issuer: "Amazon Web Services",
+    logo: awsSaa,
+  },
+  {
+    name: "AWS Cloud Practitioner",
+    issuer: "Amazon Web Services",
+    logo: awsCcp,
+  },
+  {
+    name: "Deep Learning Specialization",
+    issuer: "DeepLearning.AI",
+    logo: dlai,
+  },
+];
+
 export const skills: string[] = [
   "Python",
   "PyTorch",
@@ -77,5 +105,9 @@ export const skills: string[] = [
   "FastAPI",
   "Streamlit",
   "Svelte",
+  "Tailwind",
   "Claude Code",
+  "Open Code",
+  "OpenClaw",
+  "Hermes Agent",
 ];

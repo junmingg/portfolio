@@ -1,6 +1,6 @@
 import portrait from "@/assets/GoogleTrailblazersPic.jpg";
 import { site } from "@/data/site";
-import { schools, skills } from "@/data/education";
+import { schools, skills, certifications } from "@/data/education";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
@@ -100,6 +100,32 @@ export function About() {
                     </AccordionItem>
                   ))}
                 </Accordion>
+              </div>
+
+              <div className="mt-10">
+                <p className="text-mono-label mb-3">Certifications</p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {certifications.map((cert) => (
+                    <div
+                      key={cert.name}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-foreground/[0.03] p-3 transition-colors hover:border-accent/40"
+                    >
+                      <img
+                        src={cert.logo}
+                        alt={`${cert.name} badge`}
+                        className="h-10 w-10 shrink-0 object-contain"
+                      />
+                      <span className="flex flex-col">
+                        <span className="text-sm font-medium leading-snug text-foreground">
+                          {cert.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {cert.issuer}
+                        </span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </Reveal>
