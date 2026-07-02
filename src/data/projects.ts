@@ -8,8 +8,10 @@ import policyVideo from "@/assets/media/policy.mp4";
 import policyPoster from "@/assets/media/policy.jpg";
 import awsquiz from "@/assets/media/awsquiz.jpg";
 import kan from "@/assets/media/kan.jpg";
+import text2sql from "@/assets/media/text2sql.png";
 
 export type ProjectCategory =
+  | "Generative AI"
   | "Finance"
   | "Operations"
   | "Computer Vision"
@@ -32,6 +34,23 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    title: "Fine-Tuning Qwen2.5-Coder-7B for Text-to-SQL",
+    year: "2026",
+    category: "Generative AI",
+    context: "Personal project",
+    highlight:
+      "QLoRA fine-tune that took Qwen2.5-Coder-7B from 4% to 79% exact-match on text-to-SQL — on a single RTX 3090.",
+    bullets: [
+      "QLoRA fine-tuned Qwen2.5-Coder-7B on 25k schema→SQL pairs with completion-only loss (1 epoch, ~1h on one RTX 3090)",
+      "Lifted exact-match +75 pts (4%→79%) and independent-LLM-judged semantic equivalence +19 pts (67%→86%), validity >99%",
+      "Built a leakage-checked eval harness (canonical exact-match, sqlglot validity, independent judge) plus a label-noise ablation",
+      "Merged, quantized to GGUF (Q4_K_M/Q6_K/Q8_0), and published the model to Hugging Face",
+    ],
+    tech: ["PyTorch", "Unsloth", "QLoRA", "TRL", "Hugging Face"],
+    image: text2sql,
+    href: "https://github.com/junmingg/Unsloth-Qwen2.5-Coder-7b-Text-to-SQL-SFT",
+  },
   {
     title: "AWS Cloud Practitioner Practice Quiz",
     year: "2025",
@@ -131,6 +150,7 @@ export const projects: Project[] = [
 ];
 
 export const projectCategories: ProjectCategory[] = [
+  "Generative AI",
   "Finance",
   "Operations",
   "Computer Vision",
