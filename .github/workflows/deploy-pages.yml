@@ -1,12 +1,11 @@
 name: Deploy to GitHub Pages
 
-# Manual trigger by default so this never conflicts with a Vercel deploy.
-# To auto-deploy on every push, uncomment the `push` block below and set
-# Settings -> Pages -> Source to "GitHub Actions".
+# Auto-deploys on every push to main. Also runnable manually from the Actions tab.
+# Requires Settings -> Pages -> Source set to "GitHub Actions".
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
 
 permissions:
   contents: read
