@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { navSections, site, socials } from "@/data/site";
 import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
+import avatar from "@/assets/avatar.png";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,9 +33,14 @@ export function Navbar() {
       >
         <a
           href="#home"
-          className="rounded-full px-2 font-mono text-base font-medium tracking-tight text-foreground transition-colors hover:text-accent"
+          className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 font-mono text-base font-medium tracking-tight text-foreground transition-colors hover:text-accent"
         >
-          {site.brand}
+          <img
+            src={avatar}
+            alt="Jun Ming Chen"
+            className="h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-border"
+          />
+          <span>{site.brand}</span>
         </a>
 
         {/* Desktop nav */}
