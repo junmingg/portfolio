@@ -9,6 +9,8 @@ import policyPoster from "@/assets/media/policy.jpg";
 import awsquiz from "@/assets/media/awsquiz.jpg";
 import kan from "@/assets/media/kan.jpg";
 import text2sql from "@/assets/media/text2sql.png";
+import mcpPostgresVideo from "@/assets/media/mcp-postgres.mp4";
+import mcpPostgresPoster from "@/assets/media/mcp-postgres.jpg";
 
 export type ProjectCategory =
   | "Generative AI"
@@ -34,6 +36,24 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    title: "Postgres MCP Server + Recommender System",
+    year: "2026",
+    category: "Generative AI",
+    context: "Personal project",
+    highlight:
+      "An MCP server that gives any Claude client read-only SQL analytics and ML recommendations over one e-commerce Postgres database.",
+    bullets: [
+      "Built a Model Context Protocol server (FastMCP) exposing analytics tools, an ALS recommender, a schema resource, and a prompt",
+      "Three-layer read-only safety: a SELECT-only DB role, read-only transactions, and a sqlglot parser allowlist (unit-tested)",
+      "ALS collaborative filtering on ~398K UCI Online Retail transactions, evaluated leave-last-out (recall@10 ≈ 0.11 over 4.2K users)",
+      "Drives analytics, a recommendation, and a refused DROP in one Claude session — same data, two capabilities",
+    ],
+    tech: ["MCP", "Python", "Postgres", "implicit / ALS", "Docker"],
+    video: mcpPostgresVideo,
+    image: mcpPostgresPoster,
+    href: "https://github.com/junmingg/recommendation-system-mcp-postgres",
+  },
   {
     title: "Fine-Tuning Qwen2.5-Coder-7B for Text-to-SQL",
     year: "2026",
