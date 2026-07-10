@@ -1,4 +1,6 @@
-import { Github, Linkedin, type LucideIcon } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
+import type { ComponentType } from "react";
+import { MediumIcon } from "@/components/icons/MediumIcon";
 
 export const site = {
   name: "Chen Jun Ming",
@@ -18,7 +20,7 @@ export const site = {
 export type SocialLink = {
   label: string;
   href: string;
-  icon: LucideIcon;
+  icon: ComponentType<{ className?: string }>;
 };
 
 export const socials: SocialLink[] = [
@@ -28,6 +30,11 @@ export const socials: SocialLink[] = [
     icon: Linkedin,
   },
   { label: "GitHub", href: "https://github.com/junmingg", icon: Github },
+  {
+    label: "Medium",
+    href: "https://medium.com/@junming-chen",
+    icon: MediumIcon,
+  },
 ];
 
 export const navSections = [
