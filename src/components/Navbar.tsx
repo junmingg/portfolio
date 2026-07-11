@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { navSections, site, socials } from "@/data/site";
 import { ThemeToggle } from "./ThemeToggle";
+import { useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils";
 import avatar from "@/assets/avatar.png";
+
+// Include "home" so nothing is highlighted at the top of the page.
+const sectionIds = ["home", ...navSections.map((s) => s.id)];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const active = useActiveSection(sectionIds);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -45,15 +51,34 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-1 md:flex">
-          {navSections.map((s) => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {s.label}
-            </a>
-          ))}
+          {navSections.map((s) => {
+            const isActive = active === s.id;
+            return (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "relative rounded-full px-4 py-2 text-sm transition-colors",
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {isActive &&
+                  (reduceMotion ? (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-foreground/[0.06]" />
+                  ) : (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 -z-10 rounded-full bg-foreground/[0.06]"
+                      transition={{ type: "spring", damping: 30, stiffness: 320 }}
+                    />
+                  ))}
+                {s.label}
+              </a>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-2">
@@ -100,16 +125,23 @@ export function Navbar() {
                           <X className="size-5" />
                         </Dialog.Close>
                       </div>
-                      {navSections.map((s) => (
-                        <a
-                          key={s.id}
-                          href={`#${s.id}`}
-                          onClick={() => setOpen(false)}
-                          className="rounded-xl px-3 py-3 font-serif text-xl text-foreground transition-colors hover:text-accent"
-                        >
-                          {s.label}
-                        </a>
-                      ))}
+                      {navSections.map((s) => {
+                        const isActive = active === s.id;
+                        return (
+                          <a
+                            key={s.id}
+                            href={`#${s.id}`}
+                            onClick={() => setOpen(false)}
+                            aria-current={isActive ? "page" : undefined}
+                            className={cn(
+                              "rounded-xl px-3 py-3 font-serif text-xl transition-colors hover:text-accent",
+                              isActive ? "text-accent" : "text-foreground"
+                            )}
+                          >
+                            {s.label}
+                          </a>
+                        );
+                      })}
                       <div className="mt-auto flex gap-2 pt-6">
                         {socials.map(({ label, href, icon: Icon }) => (
                           <a

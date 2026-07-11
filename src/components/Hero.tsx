@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, FileDown } from "lucide-react";
 import { site, socials } from "@/data/site";
+import portrait from "@/assets/portrait.jpg";
 import { Button } from "./ui/button";
 
 const container = {
@@ -21,6 +22,8 @@ const item = {
 };
 
 export function Hero() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section
       id="home"
@@ -54,70 +57,98 @@ export function Hero() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto w-full max-w-5xl"
+        className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]"
       >
-        <motion.p
-          variants={item}
-          className="text-mono-label mb-6 flex items-center gap-3"
-        >
-          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent" />
-          Open to AI / ML Engineering roles
-        </motion.p>
+        {/* Text column */}
+        <div>
+          <motion.p
+            variants={item}
+            className="text-mono-label mb-6 flex items-center gap-3"
+          >
+            <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent" />
+            Open to AI / ML Engineering roles
+          </motion.p>
 
-        <motion.h1
-          variants={item}
-          className="max-w-4xl text-balance text-5xl leading-[1.02] sm:text-7xl lg:text-8xl"
-        >
-          {site.name}
-        </motion.h1>
+          <motion.h1
+            variants={item}
+            className="max-w-4xl text-balance text-5xl leading-[1.02] sm:text-7xl lg:text-7xl xl:text-8xl"
+          >
+            {site.name}
+          </motion.h1>
 
-        <motion.p
-          variants={item}
-          className="mt-5 font-mono text-base text-accent sm:text-lg"
-        >
-          {site.role}
-        </motion.p>
+          <motion.p
+            variants={item}
+            className="mt-5 font-mono text-base text-accent sm:text-lg"
+          >
+            {site.role}
+          </motion.p>
 
-        <motion.p
-          variants={item}
-          className="mt-5 max-w-2xl text-pretty text-xl leading-relaxed text-muted-foreground sm:text-2xl"
-        >
-          {site.tagline}
-        </motion.p>
+          <motion.p
+            variants={item}
+            className="mt-5 max-w-2xl text-pretty text-xl leading-relaxed text-muted-foreground sm:text-2xl"
+          >
+            {site.tagline}
+          </motion.p>
 
+          <motion.div
+            variants={item}
+            className="mt-10 flex flex-wrap items-center gap-3"
+          >
+            <Button asChild size="lg">
+              <a href="#projects">
+                View Projects <ArrowDown className="size-4" />
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href={site.resume} target="_blank" rel="noopener noreferrer">
+                Resume <FileDown className="size-4" />
+              </a>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            variants={item}
+            className="mt-10 flex items-center gap-4 text-sm text-muted-foreground"
+          >
+            {socials.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+              >
+                <Icon className="size-4" />
+                <span>{label}</span>
+                <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Portrait column — hidden below lg to preserve the mobile fold */}
         <motion.div
           variants={item}
-          className="mt-10 flex flex-wrap items-center gap-3"
+          className="relative ml-auto hidden w-full max-w-[390px] lg:block"
         >
-          <Button asChild size="lg">
-            <a href="#projects">
-              View Projects <ArrowDown className="size-4" />
-            </a>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <a href={site.resume} target="_blank" rel="noopener noreferrer">
-              Resume <FileDown className="size-4" />
-            </a>
-          </Button>
-        </motion.div>
-
-        <motion.div
-          variants={item}
-          className="mt-10 flex items-center gap-4 text-sm text-muted-foreground"
-        >
-          {socials.map(({ label, href, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
-            >
-              <Icon className="size-4" />
-              <span>{label}</span>
-              <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
-            </a>
-          ))}
+          {/* Soft amber glow behind the frame */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-8 -z-10 rounded-full blur-[90px]"
+            style={{ background: "var(--glow-a)" }}
+          />
+          <motion.div
+            initial={reduceMotion ? undefined : { scale: 1.04 }}
+            animate={reduceMotion ? undefined : { scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="glass relative overflow-hidden rounded-[var(--radius-card)] p-2"
+          >
+            <img
+              src={portrait}
+              alt="Portrait of Chen Jun Ming"
+              className="aspect-[4/5] w-full rounded-[calc(var(--radius-card)-0.5rem)] object-cover object-center"
+            />
+          </motion.div>
         </motion.div>
       </motion.div>
     </section>
