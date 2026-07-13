@@ -34,19 +34,31 @@ export function Navbar() {
       <nav
         className={cn(
           "flex w-full max-w-5xl items-center justify-between rounded-full px-3 py-2 transition-all duration-500",
-          scrolled ? "glass pl-5" : "border border-transparent"
+          scrolled ? "glass-strong pl-5" : "border border-transparent"
         )}
       >
         <a
           href="#home"
-          className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 font-mono text-base font-medium tracking-tight text-foreground transition-colors hover:text-accent"
+          aria-label={site.brand}
+          className="group flex items-center gap-2 rounded-full py-1 pl-1 pr-2"
         >
           <img
             src={avatar}
             alt="Jun Ming Chen"
             className="h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-border"
           />
-          <span>{site.brand}</span>
+          {/* Rendered as a syntax-highlighted code tag so the mono reads as
+              intentional: accent punctuation, foreground identifier. */}
+          <span
+            aria-hidden
+            className="text-legible font-mono text-[0.95rem] font-medium tracking-tight"
+          >
+            <span className="text-accent/80">&lt;</span>
+            <span className="text-foreground transition-colors group-hover:text-accent">
+              JunMing.
+            </span>
+            <span className="text-accent/80">/&gt;</span>
+          </span>
         </a>
 
         {/* Desktop nav */}
@@ -59,7 +71,7 @@ export function Navbar() {
                 href={`#${s.id}`}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "relative rounded-full px-4 py-2 text-sm transition-colors",
+                  "text-legible relative rounded-full px-4 py-2 font-mono text-[0.8rem] tracking-wide transition-colors",
                   isActive
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"

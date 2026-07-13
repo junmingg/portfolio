@@ -15,7 +15,7 @@ export function About() {
   return (
     <section id="about" className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
-        <SectionHeading index="03" kicker="Background" title="About me" />
+        <SectionHeading index="01" kicker="Background" title="About me" />
 
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           {/* Portrait + skills */}

@@ -38,8 +38,8 @@ export const socials: SocialLink[] = [
 ];
 
 export const navSections = [
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
   { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ] as const;

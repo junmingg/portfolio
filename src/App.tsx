@@ -12,9 +12,9 @@ export default function App() {
       <Navbar />
       <main className="relative z-[2]">
         <Hero />
-        <Projects />
-        <Experience />
         <About />
+        <Experience />
+        <Projects />
         <Contact />
       </main>
       <Footer />

@@ -25,7 +25,7 @@ export function Projects() {
     <section id="projects" className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
-          index="01"
+          index="03"
           kicker="Selected Work"
           title="Projects that sharpened the craft"
           description="A spread across finance, operations, computer vision, and web — each one a problem I wanted to solve end to end."
