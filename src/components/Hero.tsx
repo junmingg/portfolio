@@ -1,8 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, FileDown } from "lucide-react";
 import { site, socials } from "@/data/site";
 import portrait from "@/assets/portrait.jpg";
-import { Button } from "./ui/button";
+import { HeroTerminal } from "./HeroTerminal";
 
 const container = {
   hidden: {},
@@ -61,6 +60,17 @@ export function Hero() {
       >
         {/* Text column */}
         <div>
+          {/* The terminal's ASCII banner is the visible identity at every
+              viewport, so the serif name + role are kept in the DOM (sr-only)
+              for SEO and screen readers but hidden visually. */}
+          <motion.h1 variants={item} className="sr-only">
+            {site.name}
+          </motion.h1>
+
+          <motion.p variants={item} className="sr-only">
+            {site.role}
+          </motion.p>
+
           <motion.p
             variants={item}
             className="text-mono-label mb-6 flex items-center gap-3"
@@ -69,46 +79,13 @@ export function Hero() {
             Open to AI / ML Engineering roles
           </motion.p>
 
-          <motion.h1
-            variants={item}
-            className="max-w-4xl text-balance text-5xl leading-[1.02] sm:text-7xl lg:text-7xl xl:text-8xl"
-          >
-            {site.name}
-          </motion.h1>
-
-          <motion.p
-            variants={item}
-            className="mt-5 font-mono text-base text-accent sm:text-lg"
-          >
-            {site.role}
-          </motion.p>
-
-          <motion.p
-            variants={item}
-            className="mt-5 max-w-2xl text-pretty text-xl leading-relaxed text-muted-foreground sm:text-2xl"
-          >
-            {site.tagline}
-          </motion.p>
-
-          <motion.div
-            variants={item}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <Button asChild size="lg">
-              <a href="#projects">
-                View Projects <ArrowDown className="size-4" />
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <a href={site.resume} target="_blank" rel="noopener noreferrer">
-                Resume <FileDown className="size-4" />
-              </a>
-            </Button>
+          <motion.div variants={item} className="mt-6 max-w-2xl">
+            <HeroTerminal text={site.tagline} />
           </motion.div>
 
           <motion.div
             variants={item}
-            className="mt-10 flex items-center gap-4 text-sm text-muted-foreground"
+            className="mt-10 grid grid-cols-3 gap-3"
           >
             {socials.map(({ label, href, icon: Icon }) => (
               <a
@@ -116,11 +93,10 @@ export function Hero() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+                className="group flex items-center justify-center gap-2 rounded-full border border-border px-4 py-2.5 text-sm text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:text-foreground"
               >
-                <Icon className="size-4" />
+                <Icon className="size-[18px] transition-colors group-hover:text-accent" />
                 <span>{label}</span>
-                <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
               </a>
             ))}
           </motion.div>

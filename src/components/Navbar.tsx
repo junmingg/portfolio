@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Menu, X } from "lucide-react";
+import { FileDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { navSections, site, socials } from "@/data/site";
+import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils";
@@ -94,6 +95,11 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button asChild size="sm" className="hidden md:mr-2 md:inline-flex">
+            <a href={site.resume} target="_blank" rel="noopener noreferrer">
+              Resume <FileDown className="size-4" />
+            </a>
+          </Button>
           <ThemeToggle />
 
           {/* Mobile trigger */}
@@ -154,7 +160,18 @@ export function Navbar() {
                           </a>
                         );
                       })}
-                      <div className="mt-auto flex gap-2 pt-6">
+                      <Button asChild size="lg" className="mt-auto">
+                        <a
+                          href={site.resume}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setOpen(false)}
+                        >
+                          Resume <FileDown className="size-4" />
+                        </a>
+                      </Button>
+
+                      <div className="flex gap-2 pt-6">
                         {socials.map(({ label, href, icon: Icon }) => (
                           <a
                             key={label}
