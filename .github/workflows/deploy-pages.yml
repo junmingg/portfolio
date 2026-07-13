@@ -28,8 +28,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Repo is served at https://<user>.github.io/<repo>/ — change if the repo is renamed.
-          VITE_BASE: /portfolio/
+          # Served at the root of the custom domain (chenjunming.com), so base is "/".
+          VITE_BASE: /
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
