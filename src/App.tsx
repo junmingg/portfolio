@@ -1,3 +1,4 @@
+import { LoadingScreen } from "./components/LoadingScreen";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
@@ -9,6 +10,7 @@ import { Footer } from "./components/Footer";
 export default function App() {
   return (
     <div className="relative">
+      <LoadingScreen />
       <Navbar />
       <main className="relative z-[2]">
         <Hero />

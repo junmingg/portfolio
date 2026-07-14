@@ -46,6 +46,11 @@
               window.matchMedia("(prefers-color-scheme: dark)").matches);
           if (dark) document.documentElement.classList.add("dark");
           document.documentElement.style.colorScheme = dark ? "dark" : "light";
+          // Paint the theme background immediately so there's no white flash
+          // before the stylesheet (and loading screen) load.
+          document.documentElement.style.backgroundColor = dark
+            ? "#0e0d0c"
+            : "#f7f6f3";
         } catch (e) {}
       })();
     </script>
