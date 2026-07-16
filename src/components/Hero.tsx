@@ -16,11 +16,11 @@ const item = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] },
+    transition: { duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] },
   },
 };
 
-export function Hero() {
+export function Hero({ ready }: { ready: boolean }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -55,7 +55,7 @@ export function Hero() {
       <motion.div
         variants={container}
         initial="hidden"
-        animate="show"
+        animate={ready ? "show" : "hidden"}
         className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]"
       >
         {/* Text column */}
@@ -80,7 +80,7 @@ export function Hero() {
           </motion.p>
 
           <motion.div variants={item} className="mt-6 max-w-2xl">
-            <HeroTerminal text={site.tagline} />
+            <HeroTerminal text={site.tagline} start={ready} />
           </motion.div>
 
           <motion.div

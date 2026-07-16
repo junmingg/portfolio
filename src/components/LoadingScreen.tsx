@@ -9,7 +9,7 @@ const MIN_MS = 900;
  * with a braille spinner, dismissed once fonts are ready (plus a short minimum
  * so it doesn't just flash). Skips the spin under reduced motion.
  */
-export function LoadingScreen() {
+export function LoadingScreen({ onDone }: { onDone?: () => void }) {
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = React.useState(true);
   const [frame, setFrame] = React.useState(0);
@@ -43,7 +43,8 @@ export function LoadingScreen() {
   }, []);
 
   return (
-    <AnimatePresence>
+    // Release the hero only once the overlay has fully faded out.
+    <AnimatePresence onExitComplete={onDone}>
       {visible && (
         <motion.div
           initial={{ opacity: 1 }}

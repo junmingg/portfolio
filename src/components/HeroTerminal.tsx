@@ -10,14 +10,19 @@ import { heroSkills } from "@/data/site";
 function useTypewriter(
   text: string,
   enabled: boolean,
-  speed = 16,
-  startDelay = 700,
+  start: boolean,
+  speed = 22,
+  startDelay = 500,
 ) {
   const [count, setCount] = React.useState(enabled ? 0 : text.length);
 
   React.useEffect(() => {
     if (!enabled) {
       setCount(text.length);
+      return;
+    }
+    if (!start) {
+      setCount(0);
       return;
     }
     setCount(0);
@@ -33,7 +38,7 @@ function useTypewriter(
       clearTimeout(startTimer);
       clearTimeout(charTimer);
     };
-  }, [text, enabled, speed, startDelay]);
+  }, [text, enabled, start, speed, startDelay]);
 
   return count;
 }
@@ -72,12 +77,15 @@ const line = {
 export function HeroTerminal({
   text,
   prompt = "describe yourself",
+  start,
 }: {
   text: string;
   prompt?: string;
+  /** Hold the boot + type-out until the loading screen has dismissed. */
+  start: boolean;
 }) {
   const reduceMotion = useReducedMotion();
-  const count = useTypewriter(text, !reduceMotion);
+  const count = useTypewriter(text, !reduceMotion, start);
   const typed = text.slice(0, count);
   const done = count >= text.length;
 
@@ -104,7 +112,7 @@ export function HeroTerminal({
       <motion.div
         variants={container}
         initial={reduceMotion ? "show" : "hidden"}
-        animate="show"
+        animate={start ? "show" : "hidden"}
         className="px-4 py-4 text-sm leading-relaxed sm:text-[0.95rem]"
       >
         {/* Name banner — auto-scaled with container-query units so it fits the
