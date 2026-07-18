@@ -1,6 +1,6 @@
 import portrait from "@/assets/GoogleTrailblazersPic.jpg";
 import { site } from "@/data/site";
-import { schools, skills, certifications } from "@/data/education";
+import { schools, skillGroups, certifications } from "@/data/education";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
@@ -30,15 +30,25 @@ export function About() {
               </GlassCard>
 
               <div className="mt-6">
-                <p className="text-mono-label mb-3">Toolkit</p>
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-full border border-border bg-foreground/[0.03] px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-accent/40 hover:text-foreground"
-                    >
-                      {s}
-                    </span>
+                <p className="text-mono-label mb-4">Toolkit</p>
+                <div className="space-y-4">
+                  {skillGroups.map((group) => (
+                    <div key={group.label}>
+                      <p className="mb-1.5 flex items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-accent/80">
+                        <span aria-hidden>▸</span>
+                        {group.label}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 pl-3">
+                        {group.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-md border border-border/60 bg-foreground/[0.03] px-2 py-0.5 font-mono text-[0.72rem] lowercase text-muted-foreground transition-colors hover:border-accent/40 hover:text-foreground"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

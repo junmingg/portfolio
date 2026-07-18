@@ -89,6 +89,16 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /*
+      Fluid root scale. The whole layout is rem-based (type, spacing, radius,
+      and the max-w-* content columns), so scaling the root font-size scales
+      everything together. Holds a 16px baseline through phone / laptop /
+      1080p widths, then grows gently on larger monitors (1440p and up) so the
+      UI doesn't shrink into a big screen. Capped so ultrawide / 4K doesn't
+      over-scale. Anchored: ~17.6px at 1920w, ~20.3px at 2560w (a uniform 10%
+      bump over the 16/18.5px baseline).
+    */
+    font-size: clamp(17.6px, 0.429vw + 9.35px, 22px);
   }
 
   body {

@@ -26,7 +26,7 @@ export function Contact() {
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="tracking-tight">
                 <a href={`mailto:${site.email}`}>
                   <Mail className="size-4" />
                   {site.email}

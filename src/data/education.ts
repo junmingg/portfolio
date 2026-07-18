@@ -76,38 +76,79 @@ export const certifications: Certification[] = [
   },
 ];
 
-export const skills: string[] = [
-  "Python",
-  "PyTorch",
-  "TensorFlow",
-  "Scikit-learn",
-  "Pandas",
-  "NumPy",
-  "Generative AI",
-  "LangChain",
-  "vLLM",
-  "Llama.cpp",
-  "Ollama",
-  "RAG",
-  "NLP",
-  "Computer Vision",
-  "Vector Search",
-  "Elasticsearch",
-  "SQL",
-  "Postgres",
-  "MongoDB",
-  "Spark",
-  "AWS",
-  "GCP",
-  "Azure",
-  "Kubernetes",
-  "Airflow",
-  "FastAPI",
-  "Streamlit",
-  "Svelte",
-  "Tailwind",
-  "Claude Code",
-  "Open Code",
-  "OpenClaw",
-  "Hermes Agent",
+export type SkillGroup = {
+  /** Lowercase label, rendered as a mono eyebrow in the toolkit manifest. */
+  label: string;
+  items: string[];
+};
+
+/**
+ * Technical toolkit, grouped by theme and rendered as a "stack manifest"
+ * in the About sidebar. Front-loads the generative/agentic AI stack, then
+ * ML core, data & infrastructure, and finally visualization + web.
+ */
+export const skillGroups: SkillGroup[] = [
+  {
+    label: "generative & agentic ai",
+    items: [
+      "Generative AI",
+      "RAG",
+      "LangChain",
+      "vLLM",
+      "llama.cpp",
+      "Unsloth",
+      "Ollama",
+      "Stable Diffusion",
+      "Claude Code",
+      "Open Code",
+      "OpenClaw",
+      "Hermes Agent",
+    ],
+  },
+  {
+    label: "ml & modeling",
+    items: [
+      "Python",
+      "PyTorch",
+      "TensorFlow",
+      "Scikit-learn",
+      "NumPy",
+      "Pandas",
+      "NLP",
+      "Computer Vision",
+    ],
+  },
+  {
+    label: "data & infra",
+    items: [
+      "SQL",
+      "Postgres",
+      "MongoDB",
+      "Elasticsearch",
+      "Vector Search",
+      "Hadoop",
+      "Spark",
+      "Dataiku",
+      "Airflow",
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "GCP",
+      "Azure",
+    ],
+  },
+  {
+    label: "viz & web",
+    items: [
+      "Matplotlib",
+      "Seaborn",
+      "Plotly",
+      "Streamlit",
+      "FastAPI",
+      "Flask",
+      "Django",
+      "Svelte",
+      "Tailwind",
+    ],
+  },
 ];

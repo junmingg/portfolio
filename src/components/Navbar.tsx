@@ -95,7 +95,11 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild size="sm" className="hidden md:mr-2 md:inline-flex">
+          <Button
+            asChild
+            size="sm"
+            className="hidden tracking-wide md:mr-2 md:inline-flex"
+          >
             <a href={site.resume} target="_blank" rel="noopener noreferrer">
               Resume <FileDown className="size-4" />
             </a>
@@ -160,7 +164,7 @@ export function Navbar() {
                           </a>
                         );
                       })}
-                      <Button asChild size="lg" className="mt-auto">
+                      <Button asChild size="lg" className="mt-auto tracking-wide">
                         <a
                           href={site.resume}
                           target="_blank"
