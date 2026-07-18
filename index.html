@@ -33,6 +33,14 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Cloudflare Turnstile (explicit render — the contact form renders the
+         widget itself so it can theme + reset it). -->
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+      async
+      defer
+    ></script>
   </head>
   <body>
     <!-- Apply theme before paint to avoid flash of incorrect theme -->

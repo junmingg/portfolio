@@ -33,6 +33,16 @@ export const heroSkills: { name: string; description: string }[] = [
   },
 ];
 
+/**
+ * Contact form backend. Both values are public by design — the Worker URL is a
+ * public endpoint guarded by an origin allow-list + Turnstile, and the site key
+ * is meant to live in front-end code.
+ */
+export const contact = {
+  workerUrl: "https://portfolio-contact-worker.chenjunming.workers.dev",
+  turnstileSiteKey: "0x4AAAAAAD4fIHII8ksWmFsH",
+} as const;
+
 export type SocialLink = {
   label: string;
   href: string;
