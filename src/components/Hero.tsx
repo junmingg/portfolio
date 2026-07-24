@@ -122,6 +122,8 @@ export function Hero({ ready }: { ready: boolean }) {
             <img
               src={portrait}
               alt="Portrait of Chen Jun Ming"
+              loading="lazy"
+              decoding="async"
               className="aspect-[4/5] w-full rounded-[calc(var(--radius-card)-0.5rem)] object-cover object-center"
             />
           </motion.div>

@@ -2,12 +2,17 @@ import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 const SPINNER = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
-const MIN_MS = 900;
+// Always boot for at least this long so it never just flashes...
+const MIN_MS = 2500;
+// ...but never pin the overlay forever if fonts never settle (slow/offline).
+const HARD_CAP_MS = 8000;
 
 /**
- * A brief terminal-style boot overlay shown on page load: the claude-code mark
- * with a braille spinner, dismissed once fonts are ready (plus a short minimum
- * so it doesn't just flash). Skips the spin under reduced motion.
+ * A terminal-style boot overlay shown on page load: the claude-code mark with a
+ * braille spinner. It stays up until the page is actually ready to paint — a
+ * minimum on-screen time AND fonts loaded — so on slow networks it keeps
+ * "booting…" rather than revealing a blank hero. Skips the spin under reduced
+ * motion.
  */
 export function LoadingScreen({ onDone }: { onDone?: () => void }) {
   const reduceMotion = useReducedMotion();
@@ -21,25 +26,38 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
     return () => clearInterval(id);
   }, [reduceMotion]);
 
-  // Dismiss once the page is ready, honoring a minimum on-screen time.
+  // Dismiss once the page is genuinely ready to paint. Rather than firing off a
+  // setTimeout (which a busy/slow mobile main thread can defer until the user
+  // taps or scrolls), we poll on requestAnimationFrame: each frame checks
+  // whether fonts have loaded and the minimum time has elapsed. Because the
+  // decision to reveal happens *on a live render frame*, the hero's entrance
+  // animation is guaranteed to run instead of stalling behind a queued timer.
   React.useEffect(() => {
-    const start = Date.now();
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      const wait = Math.max(0, MIN_MS - (Date.now() - start));
-      setTimeout(() => setVisible(false), wait);
-    };
+    const start = performance.now();
+    let raf = 0;
+    let cancelled = false;
+    let fontsReady = false;
 
-    const fonts = document.fonts?.ready;
-    if (fonts) {
-      fonts.then(finish);
-      // Safety net in case fonts.ready never settles.
-      setTimeout(finish, 2500);
-    } else {
-      setTimeout(finish, MIN_MS);
-    }
+    (document.fonts?.ready ?? Promise.resolve()).then(() => {
+      fontsReady = true;
+    });
+
+    const tick = (now: number) => {
+      if (cancelled) return;
+      const elapsed = now - start;
+      const ready = elapsed >= HARD_CAP_MS || (fontsReady && elapsed >= MIN_MS);
+      if (ready) {
+        setVisible(false);
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   return (
