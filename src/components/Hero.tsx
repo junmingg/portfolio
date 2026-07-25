@@ -2,6 +2,10 @@ import { motion, useReducedMotion } from "framer-motion";
 import { site, socials } from "@/data/site";
 import portrait from "@/assets/portrait.jpg";
 import { HeroTerminal } from "./HeroTerminal";
+import { useRichMotion } from "@/hooks/use-rich-motion";
+
+const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+const DURATION = 0.9;
 
 const container = {
   hidden: {},
@@ -10,18 +14,29 @@ const container = {
   },
 };
 
-const item = {
-  hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] },
-  },
-};
+// Entrance variants are tuned to the device. On strong (desktop-class) hardware
+// items fade + slide with a soft blur — including the glass surfaces, whose
+// `backdrop-filter` the GPU composites without trouble. On touch devices we
+// avoid animating opacity/filter on those glass surfaces: doing so makes the
+// browser recomposite the frosted backdrop as the transition ends (a
+// frosted→opaque "pop" on desktop Chrome, a dropped animation that snaps to the
+// end on iOS Safari). There, the glass items slide in on transform alone.
+function makeVariants(rich: boolean) {
+  const transition = { duration: DURATION, ease: EASE };
+  const item = {
+    hidden: rich ? { opacity: 0, y: 20, filter: "blur(8px)" } : { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, ...(rich ? { filter: "blur(0px)" } : {}), transition },
+  };
+  const glassItem = rich
+    ? item
+    : { hidden: { y: 24 }, show: { y: 0, transition } };
+  return { item, glassItem };
+}
 
 export function Hero({ ready }: { ready: boolean }) {
   const reduceMotion = useReducedMotion();
+  const rich = useRichMotion();
+  const { item, glassItem } = makeVariants(rich);
 
   return (
     <section
@@ -79,7 +94,7 @@ export function Hero({ ready }: { ready: boolean }) {
             Open to AI / ML Engineering roles
           </motion.p>
 
-          <motion.div variants={item} className="mt-6 max-w-2xl">
+          <motion.div variants={glassItem} className="mt-6 max-w-2xl">
             <HeroTerminal text={site.tagline} start={ready} />
           </motion.div>
 
@@ -104,7 +119,7 @@ export function Hero({ ready }: { ready: boolean }) {
 
         {/* Portrait column — hidden below lg to preserve the mobile fold */}
         <motion.div
-          variants={item}
+          variants={glassItem}
           className="relative ml-auto hidden w-full max-w-[390px] lg:block"
         >
           {/* Soft amber glow behind the frame */}
