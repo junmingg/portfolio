@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { FileDown, Menu, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { navSections, site, socials } from "@/data/site";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { FileDown, Menu, RotateCw } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { navSections, site } from "@/data/site";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { ErrorBoundary } from "./ErrorBoundary";
+import { lazyWithTimeout } from "@/lib/lazy-with-timeout";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils";
 import avatar from "@/assets/avatar.png";
+
+const loadMobileMenu = () => import("./MobileMenu");
 
 // Include "home" so nothing is highlighted at the top of the page.
 const sectionIds = ["home", ...navSections.map((s) => s.id)];
@@ -15,6 +18,17 @@ const sectionIds = ["home", ...navSections.map((s) => s.id)];
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  // Stays true after the first open so the drawer's exit animation can play.
+  const [menuMounted, setMenuMounted] = useState(false);
+  // Set when the drawer's chunk fails. Swallowing that silently would leave the
+  // only mobile nav control looking functional but doing nothing, with
+  // aria-expanded stuck true against a drawer that will never appear.
+  const [menuFailed, setMenuFailed] = useState(false);
+  // Same reasoning as the page sections: lazy() caches its rejection, so a
+  // retry needs a fresh instance or it just re-throws. A timed-out drawer that
+  // was only slow should recover in place, not demand a reload.
+  const [menuAttempt, setMenuAttempt] = useState(0);
+  const MobileMenu = useMemo(() => lazyWithTimeout(loadMobileMenu), [menuAttempt]);
   const active = useActiveSection(sectionIds);
   const reduceMotion = useReducedMotion();
 
@@ -23,6 +37,19 @@ export function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Warm the drawer chunk shortly after load on viewports that can actually
+  // reach it, so the first tap opens immediately instead of waiting on a fetch.
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+    // Prefetch only — a failure here is not actionable, and an unhandled
+    // rejection would surface as a console error for something the user never
+    // asked for. The real attempt is guarded by the boundary below.
+    const id = window.setTimeout(() => {
+      import("./MobileMenu").catch(() => {});
+    }, 1500);
+    return () => clearTimeout(id);
   }, []);
 
   return (
@@ -106,95 +133,43 @@ export function Navbar() {
           </Button>
           <ThemeToggle />
 
-          {/* Mobile trigger */}
-          <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Dialog.Trigger asChild>
-              <button
-                aria-label="Open menu"
-                className="glass inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground md:hidden"
-              >
-                <Menu className="size-5" />
-              </button>
-            </Dialog.Trigger>
-            <AnimatePresence>
-              {open && (
-                <Dialog.Portal forceMount>
-                  <Dialog.Overlay asChild forceMount>
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="fixed inset-0 z-50 bg-background/60 backdrop-blur-sm"
-                    />
-                  </Dialog.Overlay>
-                  <Dialog.Content asChild forceMount>
-                    <motion.div
-                      initial={{ x: "100%" }}
-                      animate={{ x: 0 }}
-                      exit={{ x: "100%" }}
-                      transition={{ type: "spring", damping: 30, stiffness: 280 }}
-                      className="glass fixed inset-y-0 right-0 z-50 flex w-72 flex-col gap-2 rounded-l-[var(--radius-card)] p-6"
-                    >
-                      <Dialog.Title className="sr-only">Menu</Dialog.Title>
-                      <div className="mb-6 flex items-center justify-between">
-                        <span className="font-mono text-sm text-muted-foreground">
-                          {site.brand}
-                        </span>
-                        <Dialog.Close
-                          aria-label="Close menu"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
-                        >
-                          <X className="size-5" />
-                        </Dialog.Close>
-                      </div>
-                      {navSections.map((s) => {
-                        const isActive = active === s.id;
-                        return (
-                          <a
-                            key={s.id}
-                            href={`#${s.id}`}
-                            onClick={() => setOpen(false)}
-                            aria-current={isActive ? "page" : undefined}
-                            className={cn(
-                              "rounded-xl px-3 py-3 font-serif text-xl transition-colors hover:text-accent",
-                              isActive ? "text-accent" : "text-foreground"
-                            )}
-                          >
-                            {s.label}
-                          </a>
-                        );
-                      })}
-                      <Button asChild size="lg" className="mt-auto tracking-wide">
-                        <a
-                          href={site.resume}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => setOpen(false)}
-                        >
-                          Resume <FileDown className="size-4" />
-                        </a>
-                      </Button>
-
-                      <div className="flex gap-2 pt-6">
-                        {socials.map(({ label, href, icon: Icon }) => (
-                          <a
-                            key={label}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={label}
-                            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-accent"
-                          >
-                            <Icon className="size-[18px]" />
-                          </a>
-                        ))}
-                      </div>
-                    </motion.div>
-                  </Dialog.Content>
-                </Dialog.Portal>
-              )}
-            </AnimatePresence>
-          </Dialog.Root>
+          {/* Mobile trigger — becomes a reload control if the drawer chunk
+              fails, which is recoverable since the usual cause is a stale
+              document asking for chunk names a redeploy replaced. */}
+          <button
+            aria-label={menuFailed ? "Menu failed to load — try again" : "Open menu"}
+            aria-expanded={menuFailed ? undefined : open}
+            onClick={() => {
+              if (menuFailed) {
+                setMenuFailed(false);
+                setMenuAttempt((n) => n + 1);
+              }
+              setMenuMounted(true);
+              setOpen(true);
+            }}
+            className="glass inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground md:hidden"
+          >
+            {menuFailed ? <RotateCw className="size-5" /> : <Menu className="size-5" />}
+          </button>
+          {menuMounted && (
+            // Keyed on the attempt so a retry gets a *fresh* boundary. Without
+            // this the instance stays latched at failed=true and keeps
+            // rendering its null fallback, so the new lazy() instance built
+            // above would never get a chance to mount — every later tap would
+            // silently do nothing.
+            <ErrorBoundary
+              key={menuAttempt}
+              fallback={null}
+              onError={() => {
+                setOpen(false);
+                setMenuFailed(true);
+              }}
+            >
+              <Suspense fallback={null}>
+                <MobileMenu open={open} onOpenChange={setOpen} active={active} />
+              </Suspense>
+            </ErrorBoundary>
+          )}
         </div>
       </nav>
     </motion.header>

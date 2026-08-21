@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { site, socials } from "@/data/site";
-import portrait from "@/assets/portrait.jpg";
+import portrait from "@/assets/portrait.webp";
 import { HeroTerminal } from "./HeroTerminal";
 import { useRichMotion } from "@/hooks/use-rich-motion";
 
@@ -137,7 +137,9 @@ export function Hero({ ready }: { ready: boolean }) {
             <img
               src={portrait}
               alt="Portrait of Chen Jun Ming"
-              loading="lazy"
+              width={1148}
+              height={1000}
+              fetchPriority="high"
               decoding="async"
               className="aspect-[4/5] w-full rounded-[calc(var(--radius-card)-0.5rem)] object-cover object-center"
             />

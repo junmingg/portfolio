@@ -1,4 +1,4 @@
-import portrait from "@/assets/GoogleTrailblazersPic.jpg";
+import portrait from "@/assets/GoogleTrailblazersPic.webp";
 import { site } from "@/data/site";
 import { schools, skillGroups, certifications } from "@/data/education";
 import { SectionHeading } from "./SectionHeading";
@@ -13,7 +13,7 @@ import {
 
 export function About() {
   return (
-    <section id="about" className="relative px-6 py-28">
+    <div className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
         <SectionHeading index="01" kicker="Background" title="About me" />
 
@@ -25,6 +25,10 @@ export function About() {
                 <img
                   src={portrait}
                   alt="Jun Ming presenting at Google for the AI Trailblazer Initiative"
+                  width={1328}
+                  height={1000}
+                  loading="lazy"
+                  decoding="async"
                   className="aspect-[4/5] w-full rounded-[calc(var(--radius-card)-0.5rem)] object-cover object-left"
                 />
               </GlassCard>
@@ -123,6 +127,8 @@ export function About() {
                       <img
                         src={cert.logo}
                         alt={`${cert.name} badge`}
+                        loading="lazy"
+                        decoding="async"
                         className="h-10 w-10 shrink-0 object-contain"
                       />
                       <span className="flex flex-col">
@@ -141,6 +147,6 @@ export function About() {
           </Reveal>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

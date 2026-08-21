@@ -34,13 +34,57 @@
       rel="stylesheet"
     />
 
-    <!-- Cloudflare Turnstile (explicit render — the contact form renders the
-         widget itself so it can theme + reset it). -->
-    <script
-      src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-      async
-      defer
-    ></script>
+
+    <!-- Boot screen styles: inlined so the overlay paints on the first byte,
+         before the bundle or the webfonts have been fetched. Uses a system
+         mono stack for the same reason. -->
+    <style>
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background: #f7f6f3;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.875rem;
+        color: oklch(0.505 0.014 65);
+        transition: opacity 0.5s ease-in-out;
+      }
+      html.dark #boot {
+        background: #0e0d0c;
+        color: oklch(0.66 0.012 80);
+      }
+      #boot.boot-hide { opacity: 0; }
+      /* Last-resort failsafe. Runs on the compositor with no JS involved, so it
+         still fires if the inline script below never executes (CSP, parse
+         error) — the one case the script's own timeout cannot cover. Set later
+         than that timeout so it only ever acts as the backstop. */
+      #boot { animation: boot-failsafe 0s linear 12s forwards; }
+      @keyframes boot-failsafe {
+        to { opacity: 0; visibility: hidden; pointer-events: none; }
+      }
+      #boot .accent { color: oklch(0.62 0.13 62); }
+      html.dark #boot .accent { color: oklch(0.78 0.124 73); }
+      #boot .row { display: flex; align-items: center; gap: 0.5rem; }
+      #boot-spin { width: 1rem; text-align: center; }
+      #boot .caret {
+        display: inline-block;
+        width: 0.5em;
+        height: 1.05em;
+        transform: translateY(0.15em);
+        border-radius: 1px;
+        animation: boot-caret 1.1s steps(1) infinite;
+      }
+      @keyframes boot-caret { 0%, 50% { opacity: 1; } 50.1%, 100% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) {
+        #boot { transition: none; }
+        #boot .caret { animation: none; }
+      }
+    </style>
   </head>
   <body>
     <!-- Apply theme before paint to avoid flash of incorrect theme -->
@@ -60,6 +104,49 @@
             ? "#0e0d0c"
             : "#f7f6f3";
         } catch (e) {}
+      })();
+    </script>
+    <!-- Painted before any JS loads; React dismisses it once the hero is ready. -->
+    <div id="boot">
+      <div class="row"><span class="accent">&#10043;</span> claude-code</div>
+      <div class="row">
+        <span id="boot-spin" class="accent">&#10247;</span>
+        <span>booting session&#8230;</span>
+        <span class="caret accent" style="background: currentColor"></span>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var el = document.getElementById("boot");
+        var spin = document.getElementById("boot-spin");
+        var id = 0;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          spin.textContent = "⠿";
+        } else {
+          var frames = ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"];
+          var i = 0;
+          id = setInterval(function () {
+            spin.textContent = frames[i = (i + 1) % frames.length];
+          }, 80);
+        }
+
+        // Teardown lives here, not in the bundle, so the overlay can leave
+        // even when the bundle never runs — a chunk that 404s after a redeploy,
+        // a blocked request. React calls this when the hero is ready; the
+        // timeout is the backstop. Note this script cannot cover failures that
+        // stop it from executing in the first place (a CSP without
+        // 'unsafe-inline', a parse error); the CSS animation above is what
+        // handles those. Idempotent: whichever path fires first wins.
+        window.__bootHide = function () {
+          clearInterval(id);
+          if (!el) return;
+          el.classList.add("boot-hide");
+          var node = el;
+          el = null;
+          setTimeout(function () { node.remove(); }, 500);
+        };
+        setTimeout(window.__bootHide, 10000);
       })();
     </script>
     <div id="root"></div>

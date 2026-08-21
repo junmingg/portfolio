@@ -29,7 +29,7 @@ const directContacts = [
   },
 ];
 
-// Minimal typing for the Turnstile script loaded in index.html.
+// Minimal typing for the Turnstile script injected by loadTurnstile().
 declare global {
   interface Window {
     turnstile?: {
@@ -43,6 +43,47 @@ declare global {
   }
 }
 
+const TURNSTILE_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+// Injected when the contact form mounts rather than sitting in index.html, so
+// visitors who never reach the form never pay for it. Memoised at module scope
+// because React 18 StrictMode mounts effects twice in development.
+const LOAD_TIMEOUT_MS = 10000;
+
+let turnstileLoader: Promise<void> | undefined;
+function loadTurnstile(): Promise<void> {
+  if (window.turnstile) return Promise.resolve();
+  turnstileLoader ??= new Promise<void>((resolve, reject) => {
+    const script = document.createElement("script");
+
+    // A request can hang indefinitely behind a captive portal, a filtering
+    // proxy, or a blocking extension: neither onload nor onerror ever fires, so
+    // without this the promise never settles and the form sits in a permanent
+    // pending state that looks like the widget is merely slow.
+    const timer = setTimeout(() => {
+      script.remove();
+      turnstileLoader = undefined;
+      reject(new Error("Turnstile script timed out"));
+    }, LOAD_TIMEOUT_MS);
+
+    script.src = TURNSTILE_SRC;
+    script.async = true;
+    script.onload = () => {
+      clearTimeout(timer);
+      resolve();
+    };
+    script.onerror = () => {
+      clearTimeout(timer);
+      script.remove();
+      turnstileLoader = undefined; // allow a retry on remount
+      reject(new Error("Turnstile script failed to load"));
+    };
+    document.head.appendChild(script);
+  });
+  return turnstileLoader;
+}
+
 type Status = "idle" | "submitting" | "success" | "error";
 
 export function Contact() {
@@ -53,29 +94,63 @@ export function Contact() {
   const [token, setToken] = React.useState("");
   const [status, setStatus] = React.useState<Status>("idle");
   const [error, setError] = React.useState("");
+  // Verification failure is tracked separately from submission failure: they
+  // have different causes, different remedies, and different lifetimes. Sharing
+  // one `status` meant a widget that recovered still showed "unavailable" while
+  // happily accepting the new token.
+  const [verifyError, setVerifyError] = React.useState("");
 
   const widgetRef = React.useRef<HTMLDivElement>(null);
   const widgetId = React.useRef<string>();
 
-  // Render the Turnstile widget once its script is ready. It polls briefly
-  // because the script is async and may not be present when this mounts.
+  // Fetch the Turnstile script, then render the widget explicitly.
   React.useEffect(() => {
     let cancelled = false;
-    function tryRender() {
+    // Turnstile fires error-callback for transient conditions as well as
+    // terminal ones, so one automatic retry comes first and only a second
+    // failure is treated as terminal. Guessing at Cloudflare's error-code
+    // taxonomy would be worse than counting.
+    let errors = 0;
+
+    const failed = () => {
       if (cancelled) return;
-      if (!window.turnstile || !widgetRef.current) {
-        window.setTimeout(tryRender, 200);
-        return;
-      }
-      widgetId.current = window.turnstile.render(widgetRef.current, {
-        sitekey: contact.turnstileSiteKey,
-        theme: "auto",
-        callback: (t: string) => setToken(t),
-        "error-callback": () => setToken(""),
-        "expired-callback": () => setToken(""),
-      });
-    }
-    tryRender();
+      setVerifyError(
+        `Verification is unavailable right now. Try reloading the page, or email me directly at ${site.email}.`
+      );
+    };
+
+    loadTurnstile()
+      .then(() => {
+        if (cancelled || !widgetRef.current) return;
+        // onload firing is not proof the API installed itself — a blocked or
+        // truncated script can resolve without defining `turnstile`.
+        if (!window.turnstile) {
+          failed();
+          return;
+        }
+        widgetId.current = window.turnstile.render(widgetRef.current, {
+          sitekey: contact.turnstileSiteKey,
+          theme: "auto",
+          callback: (t: string) => {
+            // Recovery: clear the verification error, but leave any submission
+            // error alone — that one is about a different failure entirely.
+            errors = 0;
+            setVerifyError("");
+            setToken(t);
+          },
+          "error-callback": () => {
+            setToken("");
+            if (cancelled) return;
+            if (++errors === 1 && widgetId.current && window.turnstile) {
+              window.turnstile.reset(widgetId.current);
+              return;
+            }
+            failed();
+          },
+          "expired-callback": () => setToken(""),
+        });
+      })
+      .catch(failed);
     return () => {
       cancelled = true;
       if (widgetId.current && window.turnstile) {
@@ -89,13 +164,17 @@ export function Contact() {
     if (status === "submitting") return;
 
     if (!token) {
-      setStatus("error");
-      setError("Please complete the verification below.");
+      setVerifyError(
+        verifyError
+          ? `Verification is unavailable, so the form can’t be sent. Please email me directly at ${site.email}.`
+          : "Please complete the verification below."
+      );
       return;
     }
 
     setStatus("submitting");
     setError("");
+    setVerifyError("");
 
     try {
       const res = await fetch(contact.workerUrl, {
@@ -139,7 +218,7 @@ export function Contact() {
     "w-full rounded-xl border border-border bg-background/50 px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/50 focus:border-accent/50 focus:ring-2 focus:ring-accent/15 disabled:opacity-60";
 
   return (
-    <section id="contact" className="relative px-6 py-28">
+    <div className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
         <Reveal>
           <div className="glass relative overflow-hidden rounded-[var(--radius-card)] px-8 py-16 sm:px-16 sm:py-20">
@@ -263,6 +342,16 @@ export function Contact() {
                 {/* Turnstile widget renders here */}
                 <div ref={widgetRef} className="min-h-[65px] pt-1" />
 
+                {verifyError && (
+                  <p
+                    role="status"
+                    className="flex items-center gap-2 text-sm text-red-500"
+                  >
+                    <AlertCircle className="size-4 shrink-0" />
+                    {verifyError}
+                  </p>
+                )}
+
                 {status === "error" && (
                   <p className="flex items-center gap-2 text-sm text-red-500">
                     <AlertCircle className="size-4 shrink-0" />
@@ -337,6 +426,6 @@ export function Contact() {
           </div>
         </Reveal>
       </div>
-    </section>
+    </div>
   );
 }

@@ -22,7 +22,7 @@ export function Projects() {
       : sorted.filter((p) => p.category === active);
 
   return (
-    <section id="projects" className="relative px-6 py-28">
+    <div className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           index="03"
@@ -67,6 +67,6 @@ export function Projects() {
           </motion.div>
         </LayoutGroup>
       </div>
-    </section>
+    </div>
   );
 }

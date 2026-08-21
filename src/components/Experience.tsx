@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export function Experience() {
   const { theme } = useTheme();
   return (
-    <section id="experience" className="relative px-6 py-28">
+    <div className="relative px-6 py-28">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           index="02"
@@ -38,6 +38,8 @@ export function Experience() {
                         <img
                           src={theme === "dark" ? exp.logoDark : exp.logoLight}
                           alt={`${exp.company} logo`}
+                          loading="lazy"
+                          decoding="async"
                           className="max-h-full max-w-full object-contain"
                         />
                       </div>
@@ -72,6 +74,6 @@ export function Experience() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
