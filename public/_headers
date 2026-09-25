@@ -1,4 +1,4 @@
-# Response headers for Cloudflare Workers static assets (ignored by GitHub Pages).
+# Response headers for Cloudflare Pages (ignored by GitHub Pages).
 # No CSP / COEP yet: they can block Turnstile and the contact Worker, so add them
 # in report-only mode first.
 /*

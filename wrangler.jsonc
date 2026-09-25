@@ -1,9 +1,0 @@
-// Cloudflare Worker that serves the static Vite build (dist/). No server code.
-// Deployed by Workers Builds on push to main: build `npm run build`, deploy `npx wrangler deploy`.
-{
-  "name": "portfolio",
-  "compatibility_date": "2026-07-18",
-  "assets": {
-    "directory": "./dist"
-  }
-}
