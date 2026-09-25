@@ -1,4 +1,4 @@
-# Jun Ming Chen — Portfolio
+# Chen Jun Ming — Portfolio
 
 A modern, glassmorphism-inspired personal portfolio with a light/dark theme, built as a fast
 single-page React app. It leads with projects and impact, and demonstrates reactive, animated UI.

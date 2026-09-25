@@ -1,0 +1,126 @@
+<!doctype html>
+<!--
+  Source for public/og-image.png (1200x630). Variants: #a editorial+portrait
+  (current, while job hunting), #b terminal, #c light, #d split portrait.
+  Render from the repo root (Git Bash):
+    "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --hide-scrollbars \
+      --window-size=1200,630 --virtual-time-budget=8000 \
+      --screenshot="$(pwd -W)/public/og-image.png" "file:///$(pwd -W)/scripts/og-image/og.html#a"
+  After changing the image, bump the filename or add ?v=N to og:image in
+  index.html so LinkedIn/Slack drop their cached copy.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet" />
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    --bg: #0e0d0c; --fg: oklch(0.925 0.008 85); --muted: oklch(0.66 0.012 80);
+    --accent: oklch(0.78 0.124 73); --border: oklch(0.92 0.01 85 / 0.12);
+    background: var(--bg); color: var(--fg); font-family: Geist, sans-serif;
+  }
+  body.light {
+    --bg: #f7f6f3; --fg: oklch(0.248 0.012 65); --muted: oklch(0.505 0.014 65);
+    --accent: oklch(0.62 0.13 62); --border: oklch(0.262 0.012 65 / 0.14);
+  }
+  .v { display: none; width: 1200px; height: 630px; position: relative; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .serif { font-family: Fraunces, serif; font-optical-sizing: auto; }
+  .accent { color: var(--accent); }
+  .muted { color: var(--muted); }
+  .glow { position: absolute; inset: 0; background: radial-gradient(700px 420px at 85% 20%, oklch(0.78 0.124 73 / 0.14), transparent 70%); }
+
+  /* A: editorial + portrait */
+  #a { display: flex; align-items: center; padding: 0 100px; gap: 72px; }
+  #a .text { flex: 1; position: relative; }
+  #a .label { font-size: 22px; letter-spacing: .04em; margin-bottom: 28px; display: flex; gap: 12px; align-items: center; }
+  #a .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+  #a h1 { font-size: 92px; font-weight: 500; line-height: 1; letter-spacing: -0.02em; }
+  #a .role { font-size: 36px; margin-top: 22px; font-weight: 400; }
+  #a .role em { font-family: Fraunces, serif; font-style: italic; color: var(--accent); }
+  #a .tags { margin-top: 44px; font-size: 22px; }
+  #a img { width: 340px; height: 340px; border-radius: 50%; object-fit: cover; position: relative; border: 2px solid var(--border); box-shadow: 0 0 0 12px oklch(0.78 0.124 73 / 0.08); }
+
+  /* B: terminal window */
+  #b { display: flex; align-items: center; justify-content: center; }
+  #b .win { width: 1000px; border: 1px solid var(--border); border-radius: 18px; background: #161412; position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+  #b .bar { height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 20px; border-bottom: 1px solid var(--border); }
+  #b .bar i { width: 13px; height: 13px; border-radius: 50%; background: oklch(0.4 0.01 70); }
+  #b .bar span { margin-left: 16px; font-size: 17px; }
+  #b .body { padding: 44px 52px 52px; font-size: 24px; line-height: 1.6; }
+  #b h1 { font-family: Fraunces, serif; font-size: 84px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.05; margin: 14px 0 10px; }
+  #b .caret { display: inline-block; width: .55em; height: 1.05em; background: var(--accent); transform: translateY(.18em); }
+
+  /* C: light minimal */
+  #c { padding: 90px 100px; display: flex; flex-direction: column; justify-content: space-between; }
+  #c .top { font-size: 22px; display: flex; justify-content: space-between; }
+  #c h1 { font-size: 118px; font-weight: 500; letter-spacing: -0.03em; line-height: .95; }
+  #c h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+  #c .bottom { display: flex; justify-content: space-between; align-items: end; border-top: 1px solid var(--border); padding-top: 28px; font-size: 24px; }
+
+  /* D: split portrait */
+  #d { display: flex; }
+  #d .photo { width: 480px; height: 630px; position: relative; }
+  #d .photo img { width: 100%; height: 100%; object-fit: cover; }
+  #d .photo img { -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent); mask-image: linear-gradient(90deg, #000 55%, transparent); }
+  #d .text { flex: 1; padding: 0 80px 0 50px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+  #d .brand { font-size: 24px; margin-bottom: 36px; }
+  #d h1 { font-size: 80px; font-weight: 500; line-height: 1.02; letter-spacing: -0.02em; }
+  #d .role { font-size: 34px; margin-top: 18px; }
+  #d .list { margin-top: 40px; font-size: 21px; line-height: 1.9; }
+</style>
+</head>
+<body>
+  <div class="v" id="a">
+    <div class="glow"></div>
+    <div class="text">
+      <div class="label mono muted"><span class="dot"></span>Open to AI / ML roles</div>
+      <h1 class="serif">Chen Jun Ming</h1>
+      <div class="role">AI/ML Engineer &mdash; <em>LLM systems</em></div>
+      <div class="tags mono muted"><span class="accent">&#10043;</span> RAG &middot; multi-agent &middot; data infra</div>
+    </div>
+    <img src="../../src/assets/portrait.webp" />
+  </div>
+
+  <div class="v" id="b">
+    <div class="glow"></div>
+    <div class="win mono">
+      <div class="bar"><i></i><i></i><i></i><span class="muted">chenjunming.com</span></div>
+      <div class="body">
+        <div><span class="accent">&#10043;</span> <span class="muted">claude-code</span></div>
+        <div><span class="accent">&gt;</span> whoami</div>
+        <h1>Chen Jun Ming</h1>
+        <div>AI/ML Engineer <span class="muted">&mdash; building LLM-powered systems</span></div>
+        <div class="muted">RAG &middot; multi-agent tools &middot; data infrastructure <span class="caret"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v" id="c">
+    <div class="top mono muted"><span><span class="accent">&lt;</span>JunMing.<span class="accent">/&gt;</span></span><span>chenjunming.com</span></div>
+    <h1 class="serif">Chen Jun Ming<br /><em>builds with LLMs.</em></h1>
+    <div class="bottom"><span>AI/ML Engineer</span><span class="mono muted">RAG &middot; agents &middot; data infra</span></div>
+  </div>
+
+  <div class="v" id="d">
+    <div class="photo"><img src="../../src/assets/portrait.webp" /></div>
+    <div class="text">
+      <div class="brand mono"><span class="accent">&lt;</span>JunMing.<span class="accent">/&gt;</span></div>
+      <h1 class="serif">Chen Jun Ming</h1>
+      <div class="role muted">AI/ML Engineer</div>
+      <div class="list mono">
+        <div><span class="accent">&#10043;</span> RAG pipelines</div>
+        <div><span class="accent">&#10043;</span> Multi-agent systems</div>
+        <div><span class="accent">&#10043;</span> Data infrastructure</div>
+      </div>
+    </div>
+  </div>
+<script>
+  var v = location.hash.slice(1) || "a";
+  if (v === "c") document.body.classList.add("light");
+  document.getElementById(v).style.display = "flex";
+</script>
+</body>
+</html>

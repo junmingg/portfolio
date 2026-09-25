@@ -234,7 +234,7 @@ export function Contact() {
                 Have a role or an idea worth building?
               </h2>
               <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
-                I'm open to Data Science &amp; ML opportunities and the
+                I'm open to AI / ML engineering opportunities and the
                 occasional good problem. Drop me a message below.
               </p>
             </div>

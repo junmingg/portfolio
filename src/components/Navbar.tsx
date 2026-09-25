@@ -72,7 +72,7 @@ export function Navbar() {
         >
           <img
             src={avatar}
-            alt="Jun Ming Chen"
+            alt="Chen Jun Ming"
             className="h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-border"
           />
           {/* Rendered as a syntax-highlighted code tag so the mono reads as
