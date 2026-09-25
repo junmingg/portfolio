@@ -3,10 +3,19 @@
 Notes for moving `chenjunming.com` off GitHub Pages and keeping the old
 `junmingg.github.io/portfolio/` URL pointing at the new site.
 
-> The target is Cloudflare **Workers static assets** (Cloudflare's recommended
-> successor to Pages). Everything below applies equally to Cloudflare Pages.
+## Current setup (migrated 2026-09-25)
 
-## Starting state (2026-09-25)
+- Hosted on **Cloudflare Pages**, project `portfolio` (`portfolio-2kj.pages.dev`),
+  Git-connected to `junmingg/portfolio`. It builds on every push to `main`
+  (build command `npm run build`, output directory `dist`).
+- Custom domains: `chenjunming.com` and `www.chenjunming.com`.
+- `www` → apex: Rules → Redirect Rules → "Redirect from WWW to root" (301, preserve query string).
+- Response headers (HSTS, nosniff, Referrer-Policy, X-Frame-Options, `/assets/*` caching)
+  are set in `public/_headers`.
+- The GitHub Pages workflow has been deleted. Pages is still enabled in the repo settings,
+  with the custom domain set, only so the github.io URL keeps redirecting (Option 1 below).
+
+## State before migration (2026-09-25)
 
 - DNS for `chenjunming.com` is already on Cloudflare (`donna`/`owen.ns.cloudflare.com`).
   Apex A records point at GitHub Pages IPs (`185.199.108–111.153`), DNS-only.
