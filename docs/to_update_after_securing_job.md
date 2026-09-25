@@ -18,6 +18,8 @@ Places on the site that say "open to roles", plus where the new job needs to go.
       Modular Asset Management…" sentence.
 - [ ] `index.html`: in the meta `description`, the "Experience at Modular Asset
       Management, …" list.
+- [ ] `index.html`: in the JSON-LD `<script type="application/ld+json">`, change `worksFor`
+      to the new company.
 - [ ] `public/resume.pdf`: replace it with the updated resume.
 
 ## Social preview image (og-image)

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found — Chen Jun Ming</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Same theme logic as index.html so the 404 matches the visitor's choice.
+      try {
+        var s = localStorage.getItem("portfolio-theme");
+        if (s === "dark" || (!s && matchMedia("(prefers-color-scheme: dark)").matches))
+          document.documentElement.classList.add("dark");
+      } catch (e) {}
+    </script>
+    <style>
+      :root {
+        --bg: #f7f6f3; --fg: oklch(0.248 0.012 65);
+        --muted: oklch(0.505 0.014 65); --accent: oklch(0.62 0.13 62);
+        color-scheme: light;
+      }
+      html.dark {
+        --bg: #0e0d0c; --fg: oklch(0.925 0.008 85);
+        --muted: oklch(0.66 0.012 80); --accent: oklch(0.78 0.124 73);
+        color-scheme: dark;
+      }
+      body {
+        margin: 0; min-height: 100vh; display: grid; place-items: center;
+        padding: 1.5rem; box-sizing: border-box;
+        background: var(--bg); color: var(--fg);
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      main { max-width: 36rem; min-width: 0; }
+      .muted { color: var(--muted); }
+      .accent { color: var(--accent); }
+      h1 {
+        font-family: Fraunces, Georgia, serif; font-weight: 500;
+        font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1; margin: 1rem 0;
+      }
+      a { color: var(--accent); }
+      #path { overflow-wrap: anywhere; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="muted"><span class="accent">&#10043;</span> claude-code</p>
+      <p><span class="accent">&gt;</span> cat <span id="path">this-page</span></p>
+      <p class="muted">error: 404, no such file or directory</p>
+      <h1>Page not found.</h1>
+      <p><a href="/">&larr; Back to chenjunming.com</a></p>
+    </main>
+    <script>
+      document.getElementById("path").textContent = location.pathname.slice(1) || "this-page";
+    </script>
+  </body>
+</html>
